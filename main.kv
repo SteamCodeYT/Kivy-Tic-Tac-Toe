@@ -1,0 +1,73 @@
+# .kv file implementation of the App
+
+#define the items that will be in every instance of MainScreen
+<MainScreen>:
+    name: "mainScreen"
+
+    GridLayout:
+        id: grid
+        cols: 1
+        rows: 2
+
+        Label:
+            id: turnLabel
+            text: "Turn: X"
+        Board:
+            id: board
+
+
+#define the items that will be in every instance of the Board
+<Board>:
+    #define the number of rows and columns in board
+    cols: 3
+    rows: 3
+
+    #define the size of the board
+    col_default_width: 100
+    col_default_height: 100
+    row_default_width: 100
+    row_default_height: 100
+
+    col_force_default: True
+    row_force_default: True
+
+    #Create Nine Cells
+    Cell:
+        id: cell0
+    Cell:
+        id: cell1
+    Cell:
+        id: cell2
+    Cell:
+        id: cell3
+    Cell:
+        id: cell4
+    Cell:
+        id: cell5
+    Cell:
+        id: cell6
+    Cell:
+        id: cell7
+    Cell:
+        id: cell8
+
+#define the items that will be in every instance of the Cell
+<Cell>:
+    text: root.player
+
+    #on_release: 
+        #if the cell has not been filled, change it
+
+        #self.text = self.parent.parent.parent.getCurrentTurn() if self.empty else self.empty = False
+        #self.parent.parent.parent.changeTurn()
+        #self.parent.parent.children[1].text = "Turn: " + self.parent.parent.parent.getCurrentTurn()
+        #else, do nothing
+
+<GridLayout>:
+    #add white border around widget
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Line: 
+            width: 1
+            rectangle: self.x, self.y, self.width, self.height
