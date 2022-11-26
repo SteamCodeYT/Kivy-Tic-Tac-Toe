@@ -7,13 +7,41 @@
     GridLayout:
         id: grid
         cols: 1
-        rows: 2
-
-        Label:
+        rows: 3
+        
+        TurnLabel:
             id: turnLabel
             text: "Turn: X"
+            font_size: 20
+            size_hint: (root.size[0]/6000, root.size[1]/6000)
+
         Board:
             id: board
+            size_hint: (root.size[0]/500, root.size[0]/500)
+            padding: [dp(20), dp(60), dp(20), dp(60)]
+
+        GridLayout:
+            cols: 2
+            rows: 1
+            padding: 10
+            size_hint: (root.size[0]/4000, root.size[1]/4000)
+
+            RestartButton: 
+                text: "Restart"
+                
+            SettingsButton: 
+                text: "Settings"
+                
+
+<SettingsScreen>:
+    GridLayout:
+        cols:1
+        rows: 2
+        Label: 
+            text: "This is the Settings page"
+        Button:
+            text: "Return"
+            on_release: root.manager.current = "mainScreen"
 
 
 #define the items that will be in every instance of the Board
@@ -21,15 +49,6 @@
     #define the number of rows and columns in board
     cols: 3
     rows: 3
-
-    #define the size of the board
-    col_default_width: 100
-    col_default_height: 100
-    row_default_width: 100
-    row_default_height: 100
-
-    col_force_default: True
-    row_force_default: True
 
     #Create Nine Cells
     Cell:
@@ -54,16 +73,9 @@
 #define the items that will be in every instance of the Cell
 <Cell>:
     text: root.player
+    font_size: 45
 
-    #on_release: 
-        #if the cell has not been filled, change it
-
-        #self.text = self.parent.parent.parent.getCurrentTurn() if self.empty else self.empty = False
-        #self.parent.parent.parent.changeTurn()
-        #self.parent.parent.children[1].text = "Turn: " + self.parent.parent.parent.getCurrentTurn()
-        #else, do nothing
-
-<GridLayout>:
+<AnchorLayout>:
     #add white border around widget
     canvas.before:
         Color:
@@ -71,3 +83,36 @@
         Line: 
             width: 1
             rectangle: self.x, self.y, self.width, self.height
+
+<TurnLabel>:
+    background_color: 1, 1, 1, 1
+    color: 0, 0, 0, 1
+    #applies the background color to the label
+    canvas.before:
+        Color:
+            rgba: self.background_color
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<Button>:
+    background_color: 218/255, 218/255, 218/255, 0.3
+    color: 0, 0, 0, 1
+    #applies the background color to the label
+    canvas.before:
+        Color:
+            rgba: self.background_color
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [15]
+
+<GridLayout>:
+    background_color: 1, 1, 1, 1
+    #applies the background color to the label
+    canvas.before:
+        Color:
+            rgba: self.background_color
+        Rectangle:
+            size: self.size
+            pos: self.pos
