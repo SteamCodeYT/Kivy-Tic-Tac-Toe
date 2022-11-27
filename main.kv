@@ -11,17 +11,16 @@
         
         TurnLabel:
             id: turnLabel
-            text: "Turn: X"
             font_size: 20
             size_hint: (root.size[0]/6000, root.size[1]/6000)
 
         Board:
             id: board
             size_hint: (root.size[0]/500, root.size[0]/500)
-            padding: [dp(20), dp(60), dp(20), dp(60)]
+            padding: [dp(20), dp(70), dp(20), dp(70)]
 
         GridLayout:
-            cols: 2
+            cols: 3
             rows: 1
             padding: 10
             size_hint: (root.size[0]/4000, root.size[1]/4000)
@@ -31,17 +30,70 @@
                 
             SettingsButton: 
                 text: "Settings"
+            
+            MenuButton:
+                text: "Menu"
                 
 
 <SettingsScreen>:
     GridLayout:
         cols:1
-        rows: 2
+        rows: 3
+        padding: 10
         Label: 
-            text: "This is the Settings page"
-        Button:
-            text: "Return"
-            on_release: root.manager.current = "mainScreen"
+            color: 0, 0, 0, 1
+            font_size: 45
+            size_hint: (root.size[0]/6000, root.size[1]/6000)
+            text: "Settings"
+
+        GridLayout:
+            cols:1
+            rows:2
+            padding: [0, 100, 0, 100]
+            ToggleButton:
+                text: "Start with X"
+                group: "startPlayerButtons"
+                on_release: print(root.parent.screens[1].changePlayer1("X"))
+            ToggleButton:
+                text: "Start with O"
+                group: "startPlayerButtons"
+                on_release: print(root.parent.screens[1].changePlayer1("O"))
+
+        GridLayout:
+            cols:2
+            rows:2
+            size_hint: (root.size[0]/4000, root.size[1]/4000)
+            Button:
+                text: "To Game"
+                on_release: root.manager.current = "mainScreen"
+            Button:
+                text: "To Menu"
+                on_release: root.manager.current = "titleScreen"
+
+<TitleScreen>:
+    GridLayout:
+        cols: 1
+        rows: 3 
+
+        Label: 
+            color: 0, 0, 0, 1
+            font_size: 45
+            text: "Tic Tac Toe"
+
+        GridLayout:
+            cols:1
+            rows: 2
+            padding: 10
+            Button:
+                text: "Settings"
+                on_release: root.manager.current = "settingsScreen"
+            Button:
+                text: "Play"
+                on_release: root.manager.current = "mainScreen"
+        
+        Label:
+            color: 0, 0, 0, 1
+            text: "Made by SteamCode"
 
 
 #define the items that will be in every instance of the Board

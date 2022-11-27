@@ -18,7 +18,11 @@ class MainScreen(Screen):
         super(MainScreen, self).__init__(**kwargs)
 
         #define the game variables
-        self.currentTurn = "X"
+        self.player1 = "O"
+        self.currentTurn = self.player1
+
+        #update the turn Label
+        self.updateTurnLabel("Turn: " + self.currentTurn)
     
     def getCurrentTurn(self):
         return self.currentTurn
@@ -36,7 +40,22 @@ class MainScreen(Screen):
         self.currentTurn = "X"
     
     def changeTurnToO(self):
-        self.currnetTurn = "O"
+        self.currentTurn = "O"
+    
+    def changeTurnToPlayer1(self):
+        self.currentTurn = self.player1
+    
+    def changePlayer1(self, player):
+        self.player1 = player
+
+        #if the board is also empty, change the turnLabel to reflect first player
+        if self.ids.board.isEmpty():
+            self.updateTurnLabel("Turn: " + self.player1)
+            
+            #change the turn to player 1
+            self.changeTurnToPlayer1()
+
+        return self.player1
     
     def updateTurnLabel(self, updatedText):
         self.ids.turnLabel.update(updatedText)    
@@ -44,6 +63,10 @@ class MainScreen(Screen):
 class SettingsScreen(Screen):
     def __init__(self, **kwargs):
         super(SettingsScreen, self).__init__(**kwargs)
+
+class TitleScreen(Screen):
+    def __init__(self, **kwargs):
+        super(TitleScreen, self).__init__(**kwargs)
 
 #define the turn Label
 class TurnLabel(Label):
@@ -62,7 +85,7 @@ class RestartButton(Button):
     def on_release(self):
         screen = self.parent.parent.parent
         screen.ids.board.clearCells()
-        screen.changeTurnToX()
+        screen.changeTurnToPlayer1()
         screen.updateTurnLabel("Turn: " + screen.getCurrentTurn())
 
 #define the settings button
@@ -73,6 +96,15 @@ class SettingsButton(Button):
     def on_release(self):
         screen = self.parent.parent.parent
         screen.manager.current = "settingsScreen"
+
+#define the menu button
+class MenuButton(Button):
+    def __init__(self,**kwargs):
+            super(MenuButton, self).__init__(**kwargs)    
+    
+    def on_release(self):
+        screen = self.parent.parent.parent
+        screen.manager.current = "titleScreen"
 
 #define the game Board
 class Board(GridLayout):
@@ -135,6 +167,15 @@ class Board(GridLayout):
         for index in self.winIndices:
             id = "cell" + str(index)
             self.ids.get(id).changeBackgroundColor(255, 0, 0, 0.3)
+    
+    def isEmpty(self):
+        for i in range(9):
+            for index in range(9):
+                #create an id to represent the current cell
+                id = "cell" + str(index)
+                if self.ids.get(id).text != "":
+                    return False
+        return True
 
 #define the game Cell
 class Cell(Button):
@@ -188,6 +229,8 @@ class MainApp(App):
 
         #create screen manager
         sm = ScreenManager()
+
+        sm.add_widget(TitleScreen(name="titleScreen"))
         sm.add_widget(MainScreen(name="mainScreen"))
         sm.add_widget(SettingsScreen(name="settingsScreen"))
 
